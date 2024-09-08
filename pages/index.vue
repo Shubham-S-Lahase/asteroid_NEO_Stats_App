@@ -150,7 +150,7 @@ const fetchData = async () => {
       .map(([date, asteroids]) => [date, asteroids.length])
       .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
 
-    console.log(chartData.value);
+    // console.log(chartData.value);
 
     // Calculate total number of asteroids
     totalAsteroids.value = Object.values(fetchedData).flat().length;
