@@ -18,26 +18,37 @@
       <StatsCard title="Fastest Asteroid" :value="fastestAsteroid" />
       <StatsCard title="Closest Asteroid" :value="closestAsteroid" />
       <StatsCard title="Average Size" :value="averageSize" />
+
+      <div
+        class="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow mb-4"
+      >
+        <h2 class="text-2xl font-semibold text-gray-800 mb-2">
+          Total Asteroids
+        </h2>
+        <p class="text-lg text-gray-700">{{ totalAsteroids }} asteroids</p>
+      </div>
+
       <ChartComponent :chartData="chartData" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import DatePicker from "~/components/DatePicker.vue";
 import StatsCard from "~/components/StatsCard.vue";
-import ChartComponent from '~/components/ChartComponent.vue';
-import { getAsteroidsData } from '~/server/nasaApi.js';
-import { parseAsteroidStats } from '~/utils/asteroidUtils.js';
+import ChartComponent from "~/components/ChartComponent.vue";
+import { getAsteroidsData } from "~/server/nasaApi.js";
+import { parseAsteroidStats } from "~/utils/asteroidUtils.js";
 
-const startDate = ref('');
-const endDate = ref('');
+const startDate = ref("");
+const endDate = ref("");
 const data = ref(null);
 const fastestAsteroid = ref({});
 const closestAsteroid = ref({});
 const averageSize = ref(0);
 const chartData = ref([]);
+const totalAsteroids = ref(0);
 
 // Update start date
 const updateStartDate = (date) => {
@@ -53,14 +64,14 @@ const updateEndDate = (date) => {
 const fetchData = async () => {
   try {
     if (!startDate.value || !endDate.value) {
-      console.error('Please select both start and end dates.');
+      console.error("Please select both start and end dates.");
       return;
     }
-    
+
     // Fetch asteroid data using the start and end dates
     const fetchedData = await getAsteroidsData(startDate.value, endDate.value);
     if (!fetchedData) {
-      throw new Error('Invalid data structure');
+      throw new Error("Invalid data structure");
     }
 
     data.value = fetchedData;
@@ -77,9 +88,15 @@ const fetchData = async () => {
     averageSize.value = avgSize;
 
     // Prepare data for the chart
-    chartData.value = Object.entries(fetchedData).map(([date, asteroids]) => [date, asteroids.length]);
+    chartData.value = Object.entries(fetchedData).map(([date, asteroids]) => [
+      date,
+      asteroids.length,
+    ]);
+
+    // Calculate total number of asteroids
+    totalAsteroids.value = Object.values(fetchedData).flat().length;
   } catch (error) {
-    console.error('Failed to fetch data:', error);
+    console.error("Failed to fetch data:", error);
   }
 };
 </script>
