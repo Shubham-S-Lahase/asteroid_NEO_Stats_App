@@ -1,6 +1,6 @@
 <template>
   <div class="w-screen hc p-4 space-background">
-    <h1 class="text-4xl font-extrabold text-center mb-6 glowing-text">
+    <h1 class="text-4xl font-bold text-center mb-6 glowing-text">
       Asteroid NEO Stats
     </h1>
 
@@ -23,7 +23,7 @@
         @click="fetchData"
         class="ml-4 p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:bg-purple-700 transition-transform transform hover:scale-105 animate-float"
       >
-        Fetch Data
+        Get Stats
       </button>
     </div>
 
@@ -52,9 +52,7 @@
       <div
         class="p-6 bg-transparent shadow-lg rounded-lg transition-shadow mb-4"
       >
-        <h2
-          class="text-2xl text-center font-semibold text-gray-800 mb-2 glowing-text"
-        >
+        <h2 class="text-2xl text-center font-semibold text-gray-200 mb-2">
           Total Asteroids
         </h2>
         <p class="text-lg text-center font-semibold text-gray-400">
@@ -99,7 +97,24 @@ const updateEndDate = (date) => {
 const fetchData = async () => {
   try {
     if (!startDate.value || !endDate.value) {
-      console.error("Please select both start and end dates.");
+      alert("Please select both start and end dates.");
+      return;
+    }
+
+    const start = new Date(startDate.value);
+    const end = new Date(endDate.value);
+
+    const dateDifference = (end - start) / (1000 * 60 * 60 * 24);
+
+    if (dateDifference > 7) {
+      alert(
+        "The date range cannot exceed 7 days.\n Please select a shorter range."
+      );
+      return;
+    }
+
+    if (new Date(endDate.value) < new Date(startDate.value)) {
+      alert("End date cannot be earlier than start date.");
       return;
     }
 
@@ -122,10 +137,11 @@ const fetchData = async () => {
     averageSize.value = avgSize;
 
     // Prepare data for the chart
-    chartData.value = Object.entries(fetchedData).map(([date, asteroids]) => [
-      date,
-      asteroids.length,
-    ]);
+    chartData.value = Object.entries(fetchedData)
+      .map(([date, asteroids]) => [date, asteroids.length])
+      .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB));
+
+    console.log(chartData.value);
 
     // Calculate total number of asteroids
     totalAsteroids.value = Object.values(fetchedData).flat().length;
@@ -145,8 +161,32 @@ const fetchData = async () => {
 }
 
 .glowing-text {
-  color: #fff;
-  text-shadow: 0 0 10px #f3f3f3, 0 0 20px #8d83f9, 0 0 30px #8d83f9;
+  color: #e0e0e0;
+  text-shadow: 0 0 5px #ff00ff, 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+  animation: color-change 9s infinite linear;
+}
+
+@keyframes color-change {
+  0% {
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff, 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+  }
+  25% {
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff, 0 0 15px #00ffff, 0 0 30px #00ffff;
+  }
+  50% {
+    color: #9b59b6;
+    text-shadow: 0 0 5px #9b59b6, 0 0 15px #9b59b6, 0 0 30px #9b59b6;
+  }
+  75% {
+    color: #3498db;
+    text-shadow: 0 0 5px #3498db, 0 0 15px #3498db, 0 0 30px #3498db;
+  }
+  100% {
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff, 0 0 15px #ff00ff, 0 0 30px #ff00ff;
+  }
 }
 
 @keyframes float {
