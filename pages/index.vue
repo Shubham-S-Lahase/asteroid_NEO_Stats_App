@@ -27,10 +27,6 @@
       </button>
     </div>
 
-    <div v-if="loading" class="flex justify-center items-center h-64">
-      <div class="loader"></div>
-    </div>
-
     <!-- Display Stats if Data Exists -->
     <div v-if="data" class="animate-fade-in-delayed">
       <!-- Stats Cards Section -->
@@ -69,6 +65,9 @@
         <ChartComponent :chartData="chartData" class="animated-chart" />
       </div>
     </div>
+    <div v-if="loading" class="loadc">
+      <div class="loader"></div>
+    </div>
   </div>
 </template>
 
@@ -102,6 +101,14 @@ const updateEndDate = (date) => {
 const fetchData = async () => {
   try {
     loading.value = true;
+
+    // data.value = null;
+    // fastestAsteroid.value = {};
+    // closestAsteroid.value = {};
+    // averageSize.value = 0;
+    // totalAsteroids.value = 0;
+    // chartData.value = [];
+
     if (!startDate.value || !endDate.value) {
       alert("Please select both start and end dates.");
       loading.value = false;
@@ -254,6 +261,18 @@ const fetchData = async () => {
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+}
+.loadc{
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 9999
 }
 .loader {
   width: 50px;
