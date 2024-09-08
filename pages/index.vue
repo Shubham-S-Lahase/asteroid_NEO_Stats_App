@@ -78,7 +78,7 @@ import DatePicker from "~/components/DatePicker.vue";
 import StatsCard from "~/components/StatsCard.vue";
 import ChartComponent from "~/components/ChartComponent.vue";
 import { getAsteroidsData } from "~/server/nasaApi.js";
-import { parseAsteroidStats } from "~/utils/asteroidUtils.js";
+import { parseAsteroidStats } from "~/utils/asteroidutils.js";
 
 const startDate = ref("");
 const endDate = ref("");
