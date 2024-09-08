@@ -8,9 +8,9 @@
 import { ref, watch } from 'vue';
 import { use } from 'echarts/core';
 import { TitleComponent, TooltipComponent, GridComponent } from 'echarts/components';
-import { LinesChart } from 'echarts/charts';
+import { LineChart } from 'echarts/charts';
 
-use([TitleComponent, TooltipComponent, GridComponent, LinesChart]);
+use([TitleComponent, TooltipComponent, GridComponent, LineChart]);
 
 const props = defineProps({
   chartData: Array,

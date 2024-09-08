@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     'nuxt-echarts',
   ],
   echarts: {
-    charts: ['LinesChart'],
+    charts: ['LineChart'],
     components: ['TitleComponent', 'TooltipComponent', 'GridComponent']
   },
   runtimeConfig: {
