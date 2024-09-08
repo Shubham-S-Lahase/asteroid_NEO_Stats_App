@@ -1,13 +1,13 @@
 import axios from "axios";
 
 export const getAsteroidsData = async (startDate, endDate) => {
-  // Get the API key from the runtime config (assuming you have set NASA_API_KEY in .env)
+  // Get the API key from the runtime config
   const config = useRuntimeConfig();
   const apiKey = config.public.nasaApiKey;
   const baseUrl = "https://api.nasa.gov/neo/rest/v1";
 
   try {
-    // Make the GET request to NASA's API
+    //  GET request to NASA's API
     const response = await axios.get(`${baseUrl}/feed`, {
       params: {
         start_date: startDate,

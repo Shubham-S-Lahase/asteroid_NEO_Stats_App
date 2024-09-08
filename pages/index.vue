@@ -27,6 +27,10 @@
       </button>
     </div>
 
+    <div v-if="loading" class="flex justify-center items-center h-64">
+      <div class="loader"></div>
+    </div>
+
     <!-- Display Stats if Data Exists -->
     <div v-if="data" class="animate-fade-in-delayed">
       <!-- Stats Cards Section -->
@@ -84,6 +88,7 @@ const closestAsteroid = ref({});
 const averageSize = ref(0);
 const chartData = ref([]);
 const totalAsteroids = ref(0);
+const loading = ref(false);
 
 const updateStartDate = (date) => {
   startDate.value = date;
@@ -96,8 +101,10 @@ const updateEndDate = (date) => {
 // Fetch data from NASA API
 const fetchData = async () => {
   try {
+    loading.value = true;
     if (!startDate.value || !endDate.value) {
       alert("Please select both start and end dates.");
+      loading.value = false;
       return;
     }
 
@@ -110,11 +117,13 @@ const fetchData = async () => {
       alert(
         "The date range cannot exceed 7 days.\n Please select a shorter range."
       );
+      loading.value = false;
       return;
     }
 
     if (new Date(endDate.value) < new Date(startDate.value)) {
       alert("End date cannot be earlier than start date.");
+      loading.value = false;
       return;
     }
 
@@ -147,6 +156,8 @@ const fetchData = async () => {
     totalAsteroids.value = Object.values(fetchedData).flat().length;
   } catch (error) {
     console.error("Failed to fetch data:", error);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
@@ -243,5 +254,24 @@ const fetchData = async () => {
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+}
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #514b82;
+  mask: radial-gradient(circle closest-side at 50% 40%, transparent 94%, #000);
+  -webkit-mask: radial-gradient(
+    circle closest-side at 50% 40%,
+    #0000 94%,
+    #000
+  );
+  transform-origin: 50% 40%;
+  animation: l25 1s infinite linear;
+}
+@keyframes l25 {
+  100% {
+    transform: rotate(1turn);
+  }
 }
 </style>
