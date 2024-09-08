@@ -1,6 +1,9 @@
 <template>
   <div
-    class="p-6 bg-white shadow-lg rounded-lg hover:shadow-xl transition-shadow"
+    class="p-6 bg-white shadow-lg rounded-lg transition-transform"
+    @touchstart="onTouchStart"
+    @touchend="onTouchEnd"
+    :class="{ 'hover:shadow-xl transform scale-105': isTouched }"
   >
     <h2 class="text-2xl font-semibold text-gray-800 mb-2">{{ title }}</h2>
     <p class="text-lg text-gray-700">
@@ -30,10 +33,24 @@
 </template>
 
 <script setup>
+import { ref, computed } from "vue";
+
 const props = defineProps({
   title: String,
   value: [Object, String, Number],
 });
+
+const isTouched = ref(false);
+
+const onTouchStart = () => {
+  isTouched.value = true;
+};
+
+const onTouchEnd = () => {
+  setTimeout(() => {
+    isTouched.value = false;
+  }, 300);
+};
 
 const valueLabel = computed(() => {
   if (props.title === "Fastest Asteroid") return "Speed";
@@ -49,3 +66,17 @@ const cleanedName = computed(() => {
   return "";
 });
 </script>
+
+<style scoped>
+.hover\:shadow-xl {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.transform.scale-105 {
+  transform: scale(1.05);
+}
+
+.transition-transform {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+</style>
